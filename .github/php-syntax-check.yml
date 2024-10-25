@@ -1,0 +1,31 @@
+name: PHP Syntax Check
+on: [pull_request]
+jobs:
+  syntax-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3' # Change this to the PHP version you need
+      - name: Verify PHP binary
+        run: |
+          which php
+      
+      - name: Verify PHP version
+        run: |
+          php -v
+
+      - name: Install Composer dependencies
+        run: composer global require "squizlabs/php_codesniffer=*"
+
+      - name: Install PHP_CodeSniffer
+        run: composer global require "squizlabs/php_codesniffer=*"
+
+      - name: Run PHPCBF to fix issues
+        run: ~/.composer/vendor/bin/phpcbf --standard=wordpress display_message.php
+
+      - name: Verify PHPCBF changes
+        run: ~/.composer/vendor/bin/phpcs --standard=wordpress display_message.php
